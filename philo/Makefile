@@ -6,23 +6,21 @@
 #    By: lpetit <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 10:36:52 by lpetit            #+#    #+#              #
-#    Updated: 2024/02/23 10:54:43 by lpetit           ###   ########.fr        #
+#    Updated: 2024/03/13 13:35:33 by lpetit           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-SRCS_DIR = /srcs/
+SRCS_DIR = ./srcs/
 
-SRCS = $(SRCS_DIR)helper.c $(SRCS_DIR)main.c
+SRCS = $(SRCS_DIR)helper.c $(SRCS_DIR)routine.c $(SRCS_DIR)main.c
 
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
 
-INCLUDES = -I./includes
-
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I./includes
 
 .PHONY: all clean fclean re
 
