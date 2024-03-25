@@ -6,7 +6,7 @@
 /*   By: lpetit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:45:22 by lpetit            #+#    #+#             */
-/*   Updated: 2024/03/18 16:24:53 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/03/20 17:02:00 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,12 @@ void	init_forks(t_data *data)
 		data[i].left_busy = &data[i - 1].right_busy;
 		i++;
 	}
+	/*i = 0;
+	while (i <= last_philo)
+	{
+		printf("left = %p, right = %p, id = %d\n", data[i].left, &data[i].right, data[i].id);
+		i++;
+	}*/
 }
 
 void	init_philo(t_data *data, t_spec *spec, int argc, char **argv)
@@ -64,6 +70,7 @@ void	init_philo(t_data *data, t_spec *spec, int argc, char **argv)
 	spec->dead = 0;
 	spec->start_time = 0;
 	spec->data = data;
+	spec->write_flag = 0;
 	pthread_mutex_init(&spec->write, NULL);
 	while (i < n)
 	{
@@ -74,6 +81,7 @@ void	init_philo(t_data *data, t_spec *spec, int argc, char **argv)
 		data[i].id = i + 1;
 		data[i].dead = &spec->dead;
 		data[i].write = &spec->write;
+		data[i].write_busy = &spec->write_flag;
 		data[i].meal_eaten = 0;
 		data[i].start_time = &spec->start_time;
 		//printf("%p\n", data[i].start_time);
@@ -107,12 +115,12 @@ int	create_philo_thread(t_data *data, t_spec *spec)
 	n = pthread_create(&spec->thread, NULL, spec_routine, (void *)spec);
 	if (n != 0)
 		return (1);
-	//i = 0;
-	//while (i <= last_philo)
-	//{
-	//	pthread_join(data[i].philo, NULL);
-	//	i++;
-	//}
+	i = 0;
+	while (i <= last_philo)
+	{
+		pthread_join(data[i].philo, NULL);
+		i++;
+	}
 	pthread_join(spec->thread, NULL);
 	//spec->start_time = get_time();
 	return (0);

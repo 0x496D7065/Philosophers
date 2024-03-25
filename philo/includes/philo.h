@@ -6,7 +6,7 @@
 /*   By: lpetit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:14:08 by lpetit            #+#    #+#             */
-/*   Updated: 2024/03/18 16:10:05 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/03/25 14:33:30 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ typedef struct s_data
 	size_t	time_to_sleep;
 	size_t	last_meal;
 	int	id;
-	int	*dead;
 	int	meal_eaten;
+	int	*dead;
+	int	*write_busy;
 	size_t	*start_time;
 	pthread_t	philo;
 	pthread_mutex_t	*left;
@@ -42,13 +43,16 @@ typedef struct s_spectator
 {
 	int	dead;
 	int	nbr_of_meal;
+	int	write_flag;
 	size_t	start_time;
 	t_data *data;
 	pthread_t	thread;
 	pthread_mutex_t	write;
 }	t_spec;
 
-void	take_forks(t_data *data);
+void	take_fork_one(t_data *data);
+void	take_fork_two(t_data *data);
+void	take_both_forks(t_data *data);
 void	write_lock(t_data *data, int c);
 
 void	*ph_routine(void *data);

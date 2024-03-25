@@ -6,7 +6,7 @@
 /*   By: lpetit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:48:44 by lpetit            #+#    #+#             */
-/*   Updated: 2024/03/10 12:35:18 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/03/20 18:04:25 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,18 @@ int	ft_usleep(size_t time)
 
 	start = get_time();
 	while ((get_time() - start) < time)
-		usleep(1000);
+		usleep(500);
 	return (0);
 }
 
 size_t	get_time(void)
 {
 	struct timeval time;
-	char	*msg;
+	//char	*msg;
 
-	msg = "gettime error\n";
-	if (gettimeofday(&time, NULL) == -1)
-		write(2, &msg, ft_strlen(msg));
+	//msg = "gettime error\n";
+	gettimeofday(&time, NULL);
+	//if (gettimeofday(&time, NULL) == -1)
+	//	write(2, &msg, ft_strlen(msg));
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
