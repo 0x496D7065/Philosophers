@@ -6,7 +6,7 @@
 /*   By: lpetit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:14:08 by lpetit            #+#    #+#             */
-/*   Updated: 2024/03/25 14:33:30 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/04/28 15:30:16 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,34 +26,35 @@ typedef struct s_data
 	size_t	time_to_eat;
 	size_t	time_to_sleep;
 	size_t	last_meal;
+	size_t	start_time;
 	int	id;
+	int	eating;
 	int	meal_eaten;
-	int	*dead;
-	int	*write_busy;
-	size_t	*start_time;
+	int	nbr_of_meal;
+	int	*dead_flag;
 	pthread_t	philo;
 	pthread_mutex_t	*left;
-	int	*left_busy;
 	pthread_mutex_t right;
-	int	right_busy;
 	pthread_mutex_t	*write;
+	pthread_mutex_t	*meal;
+	pthread_mutex_t	*dead;
 }		t_data;
 
 typedef struct s_spectator
 {
-	int	dead;
-	int	nbr_of_meal;
-	int	write_flag;
-	size_t	start_time;
+	int	dead_flag;
 	t_data *data;
 	pthread_t	thread;
 	pthread_mutex_t	write;
+	pthread_mutex_t	meal;
+	pthread_mutex_t	dead;
 }	t_spec;
 
 void	take_fork_one(t_data *data);
 void	take_fork_two(t_data *data);
 void	take_both_forks(t_data *data);
 void	write_lock(t_data *data, int c);
+void	output_status(t_data *data, char *str);
 
 void	*ph_routine(void *data);
 void	*spec_routine(void *spec);

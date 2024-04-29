@@ -6,7 +6,7 @@
 #    By: lpetit <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 10:36:52 by lpetit            #+#    #+#              #
-#    Updated: 2024/03/18 13:33:39 by lpetit           ###   ########.fr        #
+#    Updated: 2024/04/28 16:13:13 by lpetit           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ OBJS = $(SRCS:.c=.o)
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -I./includes
+CFLAGS = -Wall -Wextra -Werror -I./includes #-fsanitize=thread
 
 .PHONY: all clean fclean re
 

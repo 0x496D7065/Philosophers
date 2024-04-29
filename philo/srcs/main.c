@@ -6,7 +6,7 @@
 /*   By: lpetit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:45:22 by lpetit            #+#    #+#             */
-/*   Updated: 2024/03/20 17:02:00 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/04/28 16:54:05 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,45 +33,32 @@ void	init_forks(t_data *data)
 
 	i = 0;
 	last_philo = data[0].philo_nbr - 1;
-	//printf("philo_nbr = %ld\n", data[0].philo_nbr);
-	//printf("last_philo = %ld\n", last_philo);
 	while (i <= last_philo)
 	{
-		//printf("i = %ld\n", i);
 		pthread_mutex_init(&data[i].right, NULL);
-		data[i].right_busy = 0;
 		i++;
 	}
 	data[0].left = &data[last_philo].right;
-	data[0].left_busy = &data[last_philo].right_busy;
 	i = 1;
 	while (i <= last_philo)
 	{
 		data[i].left = &data[i - 1].right;
-		data[i].left_busy = &data[i - 1].right_busy;
 		i++;
 	}
-	/*i = 0;
-	while (i <= last_philo)
-	{
-		printf("left = %p, right = %p, id = %d\n", data[i].left, &data[i].right, data[i].id);
-		i++;
-	}*/
 }
 
 void	init_philo(t_data *data, t_spec *spec, int argc, char **argv)
 {
 	size_t	i;
-	//size_t	id;
 	size_t	n;
 
 	i = 0;
 	n = ft_atol(argv[1]);
-	spec->dead = 0;
-	spec->start_time = 0;
+	spec->dead_flag = 0;
 	spec->data = data;
-	spec->write_flag = 0;
 	pthread_mutex_init(&spec->write, NULL);
+	pthread_mutex_init(&spec->meal, NULL);
+	pthread_mutex_init(&spec->dead, NULL);
 	while (i < n)
 	{
 		data[i].philo_nbr = ft_atol(argv[1]);
@@ -81,17 +68,16 @@ void	init_philo(t_data *data, t_spec *spec, int argc, char **argv)
 		data[i].id = i + 1;
 		data[i].dead = &spec->dead;
 		data[i].write = &spec->write;
-		data[i].write_busy = &spec->write_flag;
+		data[i].meal = &spec->meal;
+		data[i].eating = 0;
 		data[i].meal_eaten = 0;
-		data[i].start_time = &spec->start_time;
-		//printf("%p\n", data[i].start_time);
+		data[i].start_time = get_time();
+		data[i].last_meal = data[i].start_time;
+		data[i].dead_flag = &spec->dead_flag;
+		if (argc == 6)
+			data[i].nbr_of_meal = ft_atol(argv[5]);
 		i++;
 	}
-	if (argc == 6)
-		spec->nbr_of_meal = ft_atol(argv[5]);
-	else
-		spec->nbr_of_meal = -1;
-	//printf("-----------------------\n");
 	init_forks(data);
 }
 
@@ -99,30 +85,25 @@ int	create_philo_thread(t_data *data, t_spec *spec)
 {
 	size_t	i;
 	size_t	n;
-	size_t	last_philo;
 
 	i = 0;
-	last_philo = data[0].philo_nbr - 1;
-	//printf("spec address = %p\n", &spec->dead);
-	//printf("data address = %p\n", data->dead);
-	while (i <= last_philo)
+	n = pthread_create(&spec->thread, NULL, spec_routine, (void *)data);
+	if (n != 0)
+		return (1);
+	while (i < data[0].philo_nbr)
 	{
 		n = pthread_create(&data[i].philo, NULL, ph_routine, (void *)&data[i]);
 		if (n != 0)
 			return (1);
 		i++;
 	}
-	n = pthread_create(&spec->thread, NULL, spec_routine, (void *)spec);
-	if (n != 0)
-		return (1);
 	i = 0;
-	while (i <= last_philo)
+	pthread_join(spec->thread, NULL);
+	while (i < data[0].philo_nbr)
 	{
 		pthread_join(data[i].philo, NULL);
 		i++;
 	}
-	pthread_join(spec->thread, NULL);
-	//spec->start_time = get_time();
 	return (0);
 }
 
@@ -141,13 +122,11 @@ int	main(int argc, char **argv)
 			return (0);
 		}
 		init_philo(data, &spec, argc, argv);
-		//printf("%d\n", spec.dead);
 		if (create_philo_thread(data, &spec) == 1)
 		{
 			printf("error\n");
 			return (0);
 		}
-		//pthread_mutex_unlock(&spec.write);
 	}
 	return (0);
 }
