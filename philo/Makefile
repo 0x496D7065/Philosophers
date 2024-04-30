@@ -14,7 +14,7 @@ NAME = philo
 
 SRCS_DIR = ./srcs/
 
-SRCS = $(SRCS_DIR)helper.c $(SRCS_DIR)routine.c $(SRCS_DIR)action.c $(SRCS_DIR)main.c
+SRCS = $(SRCS_DIR)helper.c $(SRCS_DIR)routine.c $(SRCS_DIR)init.c $(SRCS_DIR)action.c $(SRCS_DIR)main.c
 
 OBJS = $(SRCS:.c=.o)
 

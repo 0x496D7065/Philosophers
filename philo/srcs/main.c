@@ -26,7 +26,7 @@ int	arg_check(int argc, char **argv)
 	return (0);
 }
 
-void	init_forks(t_data *data)
+int	init_forks(t_data *data, t_spec *spec)
 {
 	size_t	i;
 	size_t	last_philo;
@@ -35,7 +35,11 @@ void	init_forks(t_data *data)
 	last_philo = data[0].philo_nbr - 1;
 	while (i <= last_philo)
 	{
-		pthread_mutex_init(&data[i].right, NULL);
+		if (pthread_mutex_init(&data[i].right, NULL) != 0)
+		{
+			destroy_all_mutex(data, spec, i);
+			return (1);
+		}
 		i++;
 	}
 	data[0].left = &data[last_philo].right;
@@ -45,40 +49,32 @@ void	init_forks(t_data *data)
 		data[i].left = &data[i - 1].right;
 		i++;
 	}
+	return (0);
 }
 
-void	init_philo(t_data *data, t_spec *spec, int argc, char **argv)
+int	init_philo(t_data *data, t_spec *spec, int argc, char **argv)
 {
 	size_t	i;
 	size_t	n;
 
 	i = 0;
 	n = ft_atol(argv[1]);
-	spec->dead_flag = 0;
-	spec->data = data;
-	pthread_mutex_init(&spec->write, NULL);
-	pthread_mutex_init(&spec->meal, NULL);
-	pthread_mutex_init(&spec->dead, NULL);
+	if (init_spec(spec, data) != 0)
+		return (1);
 	while (i < n)
 	{
-		data[i].philo_nbr = ft_atol(argv[1]);
-		data[i].time_to_die = ft_atol(argv[2]);
-		data[i].time_to_eat = ft_atol(argv[3]);
-		data[i].time_to_sleep = ft_atol(argv[4]);
-		data[i].id = i + 1;
+		init_base(&data[i], argc, argv, i);
 		data[i].dead = &spec->dead;
 		data[i].write = &spec->write;
 		data[i].meal = &spec->meal;
-		data[i].eating = 0;
-		data[i].meal_eaten = 0;
 		data[i].start_time = get_time();
 		data[i].last_meal = data[i].start_time;
 		data[i].dead_flag = &spec->dead_flag;
-		if (argc == 6)
-			data[i].nbr_of_meal = ft_atol(argv[5]);
 		i++;
 	}
-	init_forks(data);
+	if (init_forks(data, spec) != 0)
+		return (1);
+	return (0);
 }
 
 int	create_philo_thread(t_data *data, t_spec *spec)
@@ -111,22 +107,25 @@ int	main(int argc, char **argv)
 {
 	t_data	data[200];
 	t_spec	spec;
-	int	n;
 
 	if (argc == 5 || argc == 6)
 	{
-		n = arg_check(argc, argv);
-		if (n == 1)
+		if (arg_check(argc, argv) != 0)
 		{
 			printf("error\n");
-			return (0);
+			return (1);
 		}
-		init_philo(data, &spec, argc, argv);
+		if (init_philo(data, &spec, argc, argv) != 0)
+		{
+			printf("error\n");
+			return (1);
+		}
 		if (create_philo_thread(data, &spec) == 1)
 		{
 			printf("error\n");
-			return (0);
+			return (1);
 		}
+		destroy_all_mutex(data, &spec, data[0].philo_nbr);
 	}
 	return (0);
 }

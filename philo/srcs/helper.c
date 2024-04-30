@@ -42,7 +42,7 @@ int	ft_isdigit(const char *str)
 
 long long	ft_atol(const char *nptr)
 {
-	int		sign;
+	int				sign;
 	long long		nbr;
 
 	sign = 0;
@@ -77,12 +77,8 @@ int	ft_usleep(size_t time)
 
 size_t	get_time(void)
 {
-	struct timeval time;
-	//char	*msg;
+	struct timeval	time;
 
-	//msg = "gettime error\n";
 	gettimeofday(&time, NULL);
-	//if (gettimeofday(&time, NULL) == -1)
-	//	write(2, &msg, ft_strlen(msg));
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
