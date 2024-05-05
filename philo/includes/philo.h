@@ -6,7 +6,7 @@
 /*   By: lpetit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:14:08 by lpetit            #+#    #+#             */
-/*   Updated: 2024/04/28 15:30:16 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/05/05 13:21:21 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,11 @@ void		philo_eat(t_data *data);
 void		sleep_or_think(t_data *data, int c);
 void		init_base(t_data *data, int argc, char **argv, int i);
 void		destroy_all_mutex(t_data *data, t_spec *spec, int n);
+void		clean_threads(t_data *data, t_spec *spec, size_t n);
 
 int			init_spec(t_spec *spec, t_data *data);
 int			check_dead(t_data *data);
+int			check_meal(t_data *data);
 int			ft_isdigit(const char *str);
 int			ft_usleep(size_t time);
 

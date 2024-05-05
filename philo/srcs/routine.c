@@ -6,7 +6,7 @@
 /*   By: lpetit <lpetit@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:01:24 by lpetit            #+#    #+#             */
-/*   Updated: 2024/04/28 15:59:11 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/05/05 12:06:14 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	*spec_routine(void *arg)
 	data = (t_data *)arg;
 	while (1)
 	{
-		if (is_philo_dead(data) == 1)
+		if (is_philo_dead(data) == 1 || check_meal(data) == 1)
 			break ;
 	}
 	return (NULL);

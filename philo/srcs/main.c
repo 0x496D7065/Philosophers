@@ -6,7 +6,7 @@
 /*   By: lpetit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 10:45:22 by lpetit            #+#    #+#             */
-/*   Updated: 2024/04/28 16:54:05 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/05/05 13:38:10 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,10 @@ int	create_philo_thread(t_data *data, t_spec *spec)
 	{
 		n = pthread_create(&data[i].philo, NULL, ph_routine, (void *)&data[i]);
 		if (n != 0)
+		{
+			clean_threads(data, spec, i);
 			return (1);
+		}
 		i++;
 	}
 	i = 0;
@@ -123,6 +126,7 @@ int	main(int argc, char **argv)
 		if (create_philo_thread(data, &spec) == 1)
 		{
 			printf("error\n");
+			destroy_all_mutex(data, &spec, data[0].philo_nbr);
 			return (1);
 		}
 		destroy_all_mutex(data, &spec, data[0].philo_nbr);

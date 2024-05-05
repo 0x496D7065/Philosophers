@@ -6,7 +6,7 @@
 /*   By: lpetit <lpetit@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 13:23:07 by lpetit            #+#    #+#             */
-/*   Updated: 2024/04/28 14:49:46 by lpetit           ###   ########.fr       */
+/*   Updated: 2024/05/05 12:51:17 by lpetit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	philo_eat(t_data *data)
 	output_status(data, "is eating");
 	pthread_mutex_lock(data->meal);
 	data->last_meal = get_time();
-	data->nbr_of_meal++;
+	data->meal_eaten++;
 	pthread_mutex_unlock(data->meal);
 	ft_usleep(data->time_to_eat);
 	data->eating = 0;
