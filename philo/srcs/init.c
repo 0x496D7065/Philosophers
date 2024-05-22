@@ -85,7 +85,7 @@ int	check_meal(t_data *data)
 		i++;
 		if (i == data[0].philo_nbr)
 		{
-			pthread_mutex_lock(data[0].dead)
+			pthread_mutex_lock(data[0].dead);
 			*data[0].dead_flag = 1;
 			pthread_mutex_unlock(data[0].dead);
 			return (1);
