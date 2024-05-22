@@ -75,7 +75,7 @@ int	check_meal(t_data *data)
 	while (i < data[0].philo_nbr)
 	{
 		pthread_mutex_lock(data[0].meal);
-		if (data[i].meal_eaten < data[0].nbr_of_meal 
+		if (data[i].meal_eaten < data[0].nbr_of_meal
 			|| data[0].nbr_of_meal == -1)
 		{
 			pthread_mutex_unlock(data[0].meal);
@@ -85,7 +85,7 @@ int	check_meal(t_data *data)
 		i++;
 		if (i == data[0].philo_nbr)
 		{
-			pthread_mutex_lock(data[0].dead);
+			pthread_mutex_lock(data[0].dead)
 			*data[0].dead_flag = 1;
 			pthread_mutex_unlock(data[0].dead);
 			return (1);
